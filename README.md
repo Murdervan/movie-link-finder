@@ -1,2 +1,2 @@
-<p align="center">
-  ###Movie id finder </p>
+<a align="center">
+  ###Movie id finder </a>
