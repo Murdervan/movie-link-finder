@@ -4,9 +4,85 @@
 <meta charset="UTF-8">
 <title>Movie ID Finder</title>
 <style>
-body { font-family: Arial; max-width: 600px; margin:auto; padding:20px; }
-input { width:100%; padding:10px; font-size:16px; }
-.movie { border-bottom:1px solid #ccc; padding:10px 0; }
+  body {
+    font-family: Arial, sans-serif;
+    background-color: #121212; /* Sort baggrund */
+    color: #fff; /* Hvid tekst */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    min-height: 100vh;
+    padding: 40px 20px;
+    justify-content: flex-start;
+  }
+
+  h2 {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  input {
+    width: 100%;
+    max-width: 400px;
+    padding: 10px;
+    font-size: 16px;
+    border-radius: 5px;
+    border: none;
+    margin-bottom: 30px;
+  }
+
+  #results {
+    width: 100%;
+    max-width: 600px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .movie {
+    display: flex;
+    gap: 20px;
+    align-items: center;
+    background-color: #1e1e1e;
+    padding: 15px;
+    border-radius: 10px;
+  }
+
+  .movie img {
+    width: 80px;
+    border-radius: 5px;
+  }
+
+  .movie-info {
+    display: flex;
+    flex-direction: column;
+  }
+
+  .movie-info b {
+    font-size: 18px;
+    margin-bottom: 5px;
+  }
+
+  .movie-info span {
+    font-size: 14px;
+    color: #ccc;
+  }
+
+  footer {
+    margin-top: 40px;
+    text-align: center;
+    font-size: 14px;
+    color: #888;
+  }
+
+  footer a {
+    color: #1da1f2; /* Lidt kontrast for link */
+    text-decoration: none;
+  }
+
+  footer a:hover {
+    text-decoration: underline;
+  }
 </style>
 </head>
 <body>
@@ -16,15 +92,30 @@ input { width:100%; padding:10px; font-size:16px; }
 
 <div id="results"></div>
 
+<footer>
+  <div>Besøg min GitHub: <a href="https://github.com/murdervan" target="_blank">github.com/murdervan</a></div>
+  <div>Besøgstæller: <span id="counter">0</span></div>
+</footer>
+
 <script>
 const API_KEY = "b7a512be09653a21e9b9cc99a026ae46";
+
+const q = document.getElementById("q");
+const results = document.getElementById("results");
+const counter = document.getElementById("counter");
+
+// Enkel lokal besøgs-tæller
+let visits = localStorage.getItem("visits") || 0;
+visits++;
+localStorage.setItem("visits", visits);
+counter.textContent = visits;
 
 q.oninput = async () => {
   results.innerHTML = "";
   if (q.value.length < 2) return;
 
   const res = await fetch(
-    `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${q.value}`
+    `https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(q.value)}`
   );
   const data = await res.json();
 
@@ -33,11 +124,18 @@ q.oninput = async () => {
       `https://api.themoviedb.org/3/movie/${m.id}?api_key=${API_KEY}`
     ).then(r => r.json());
 
+    const poster = m.poster_path 
+      ? `https://image.tmdb.org/t/p/w200${m.poster_path}` 
+      : "https://via.placeholder.com/80x120?text=No+Image";
+
     results.innerHTML += `
       <div class="movie">
-        <b>${m.title}</b><br>
-        TMDB ID: ${m.id}<br>
-        IMDb ID: ${d.imdb_id || "N/A"}
+        <img src="${poster}" alt="${m.title}">
+        <div class="movie-info">
+          <b>${m.title}</b>
+          <span>TMDB ID: ${m.id}</span>
+          <span>IMDb ID: ${d.imdb_id || "N/A"}</span>
+        </div>
       </div>
     `;
   }
