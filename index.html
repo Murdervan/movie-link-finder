@@ -202,20 +202,25 @@ footer {
   border-top: 2px solid #333;
 }
 
-footer p, footer a {
+footer p {
   margin: 0;
-  color: var(--text-color);
+  color: var(--text-color);   /* lys farve for teksten */
   font-size: 14px;
   text-align: center;
 }
 
 footer a {
+  margin: 0;
+  color: var(--tmdb-color);   /* blå farve på linket */
+  font-size: 14px;
   text-decoration: none;
+  font-weight: bold;          /* gør linket lidt tydeligere */
 }
 
 footer a:hover {
-  text-decoration: underline;
-
+  text-decoration: underline; 
+  color: #0d8ddb;             /* mørkere blå ved hover */
+}
 </style>
 </head>
 <body>
