@@ -195,11 +195,13 @@ footer {
   margin-top: auto;
   width: 100%;
   background-color: var(--card-bg);
-  padding: 20px 40px;
+  padding: 15px 30px;
   display: flex;
-  flex-direction: column;
   align-items: center;
+  justify-content: center;
+  gap: 20px;
   border-top: 2px solid #333;
+  flex-wrap: wrap;
 }
 
 footer p { margin: 2px 0; color: #ccc; text-align: center; max-width: 600px; }
@@ -223,16 +225,17 @@ footer a:hover { text-decoration: underline; }
 </main>
 
 <footer>
-  <p>2026 Movie ID Finder.</p>
+  <p style="margin:0;">&copy; 2026 Movie ID Finder</p>
 
-  <!-- Visitor counter -->
   <img
-    src="https://visitorbadge.io/api/visitors?path=murdervan.movie-id-finder&label=Visitors&countColor=%231da1f2"
+    src="https://visitorbadge.io/api/visitors?path=murdervan.github.io/movie-id-finder&label=Visitors&countColor=%231da1f2"
     alt="Visitor counter"
-    style="margin:10px 0;"
+    style="height:20px;"
   >
-  
-  <a href="https://github.com/murdervan" target="_blank"><i class="fab fa-github"></i> Visit my GitHub</a>
+
+  <a href="https://github.com/murdervan" target="_blank">
+    <i class="fab fa-github"></i> GitHub
+  </a>
 </footer>
 
 <script>
