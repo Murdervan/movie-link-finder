@@ -44,10 +44,10 @@
     z-index: 100;
   }
 
-  header h2 { 
-    margin: 0; 
-    font-size: 28px; 
-    display: none; /* vi bruger logo i stedet */
+  header h2 {
+    margin: 0;
+    font-size: 28px;
+    display: none; /* skjul tekst, vi bruger logo */
   }
 
   #toggle-mode {
@@ -85,12 +85,39 @@
     font-size: 16px;
     border-radius: 8px;
     border: none;
-    margin-bottom: 20px;
+    margin-bottom: 0;
     background-color: var(--card-bg);
     color: var(--text-color);
   }
 
   input:focus { outline: 2px solid var(--tmdb-color); }
+
+  /* Autocomplete dropdown */
+  #autocomplete-list {
+    width: 100%;
+    max-width: 500px;
+    background-color: var(--card-bg);
+    border: 1px solid #333;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    position: absolute;
+    z-index: 999;
+    top: 100%;
+    left: 50%;
+    transform: translateX(-50%);
+    overflow: hidden;
+  }
+
+  .autocomplete-item {
+    padding: 8px 12px;
+    cursor: pointer;
+    transition: background 0.2s;
+  }
+
+  .autocomplete-item:hover {
+    background-color: var(--tmdb-color);
+    color: #fff;
+  }
 
   #results {
     width: 100%;
@@ -191,7 +218,10 @@
 </header>
 
 <main>
-  <input id="q" placeholder="Search for a movie">
+  <div style="position: relative; width: 100%; max-width: 500px;">
+    <input id="q" placeholder="Search for a movie">
+    <div id="autocomplete-list"></div>
+  </div>
   <div id="results"></div>
 </main>
 
@@ -206,6 +236,7 @@ const API_KEY = "b7a512be09653a21e9b9cc99a026ae46";
 const q = document.getElementById("q");
 const results = document.getElementById("results");
 const toggleBtn = document.getElementById("toggle-mode");
+const autocompleteList = document.getElementById("autocomplete-list");
 
 // Dark/light mode
 if(localStorage.getItem("mode") === "light") document.body.classList.add("light");
@@ -222,42 +253,68 @@ function copyToClipboard(id, button) {
   setTimeout(() => { button.textContent = "Copy"; button.classList.remove("copied"); }, 1500);
 }
 
-// Search movies on input
+// Live autocomplete + search
 q.addEventListener("input", async () => {
+  autocompleteList.innerHTML = "";
   results.innerHTML = "";
-  if(q.value.length < 2) return;
+  const query = q.value.trim();
+  if(query.length < 2) return;
 
-  const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(q.value)}`);
+  const res = await fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${encodeURIComponent(query)}`);
   const data = await res.json();
 
-  for(const m of data.results){
-    const d = await fetch(`https://api.themoviedb.org/3/movie/${m.id}?api_key=${API_KEY}`).then(r => r.json());
-    const poster = d.poster_path ? `https://image.tmdb.org/t/p/w200${d.poster_path}` : "https://via.placeholder.com/100x150?text=No+Image";
-    const tmdbLink = `https://www.themoviedb.org/movie/${d.id}`;
-    const imdbLink = d.imdb_id ? `https://www.imdb.com/title/${d.imdb_id}/` : "#";
-    const genreBadges = d.genres?.map(g => `<span class="badge">${g.name}</span>`).join("") || "";
+  // Autocomplete items
+  data.results.slice(0,5).forEach(movie => {
+    const item = document.createElement("div");
+    item.classList.add("autocomplete-item");
+    item.textContent = movie.title;
+    item.addEventListener("click", () => {
+      q.value = movie.title;
+      autocompleteList.innerHTML = "";
+      displayMovie(movie.id);
+    });
+    autocompleteList.appendChild(item);
+  });
 
-    results.innerHTML += `
-      <div class="movie">
-        <img src="${poster}" alt="${d.title}" loading="lazy">
-        <div class="movie-info">
-          <b>${d.title} (${d.release_date ? d.release_date.slice(0,4) : "N/A"})</b>
-          <div class="badges">${genreBadges}</div>
-          <p>⭐ Rating: ${d.vote_average || "N/A"} | Votes: ${d.vote_count || 0}</p>
-          <div class="id-box tmdb">
-            <a href="${tmdbLink}" target="_blank">TMDB ID: ${d.id}</a>
-            <button class="copy-btn" onclick="copyToClipboard('${d.id}', this)">Copy</button>
-          </div>
-          ${d.imdb_id ? `<div class="id-box imdb">
-            <a href="${imdbLink}" target="_blank">IMDb ID: ${d.imdb_id}</a>
-            <button class="copy-btn" onclick="copyToClipboard('${d.imdb_id}', this)">Copy</button>
-          </div>` : ''}
-        </div>
-      </div>
-    `;
+  // If user presses enter, show first result
+  if(data.results.length > 0 && document.activeElement === q) {
+    displayMovie(data.results[0].id);
   }
 });
+
+async function displayMovie(id) {
+  const d = await fetch(`https://api.themoviedb.org/3/movie/${id}?api_key=${API_KEY}`).then(r => r.json());
+  const poster = d.poster_path ? `https://image.tmdb.org/t/p/w200${d.poster_path}` : "https://via.placeholder.com/100x150?text=No+Image";
+  const tmdbLink = `https://www.themoviedb.org/movie/${d.id}`;
+  const imdbLink = d.imdb_id ? `https://www.imdb.com/title/${d.imdb_id}/` : "#";
+  const genreBadges = d.genres?.map(g => `<span class="badge">${g.name}</span>`).join("") || "";
+
+  results.innerHTML = `
+    <div class="movie">
+      <img src="${poster}" alt="${d.title}" loading="lazy">
+      <div class="movie-info">
+        <b>${d.title} (${d.release_date ? d.release_date.slice(0,4) : "N/A"})</b>
+        <div class="badges">${genreBadges}</div>
+        <p>⭐ Rating: ${d.vote_average || "N/A"} | Votes: ${d.vote_count || 0}</p>
+        <p>${d.overview?.slice(0,150) || "No description"}${d.overview?.length > 150 ? "..." : ""}</p>
+        <div class="id-box tmdb">
+          <a href="${tmdbLink}" target="_blank">TMDB ID: ${d.id}</a>
+          <button class="copy-btn" onclick="copyToClipboard('${d.id}', this)">Copy</button>
+        </div>
+        ${d.imdb_id ? `
+        <div class="id-box imdb">
+          <a href="${imdbLink}" target="_blank">IMDb ID: ${d.imdb_id}</a>
+          <button class="copy-btn" onclick="copyToClipboard('${d.imdb_id}', this)">Copy</button>
+        </div>` : ''}
+      </div>
+    </div>
+  `;
+}
 </script>
+
+</body>
+</html>
+
 
 </body>
 </html>
