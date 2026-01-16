@@ -1,13 +1,13 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
 <meta charset="UTF-8">
 <title>Movie ID Finder</title>
 <style>
   body {
     font-family: Arial, sans-serif;
-    background-color: #121212; /* Sort baggrund */
-    color: #fff; /* Hvid tekst */
+    background-color: #121212; /* Dark background */
+    color: #ffffff; /* White text */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -65,18 +65,18 @@
 
   .movie-info span {
     font-size: 14px;
-    color: #ccc;
+    color: #cccccc;
   }
 
   footer {
     margin-top: 40px;
     text-align: center;
     font-size: 14px;
-    color: #888;
+    color: #888888;
   }
 
   footer a {
-    color: #1da1f2; /* Lidt kontrast for link */
+    color: #1da1f2;
     text-decoration: none;
   }
 
@@ -88,13 +88,13 @@
 <body>
 
 <h2>Movie ID Finder</h2>
-<input id="q" placeholder="Søg film">
+<input id="q" placeholder="Search for a movie">
 
 <div id="results"></div>
 
 <footer>
-  <div>Besøg min GitHub: <a href="https://github.com/murdervan" target="_blank">github.com/murdervan</a></div>
-  <div>Besøgstæller: <span id="counter">0</span></div>
+  <div>Visit my GitHub: <a href="https://github.com/murdervan" target="_blank">github.com/murdervan</a></div>
+  <div>Visit count: <span id="counter">0</span></div>
 </footer>
 
 <script>
@@ -104,7 +104,7 @@ const q = document.getElementById("q");
 const results = document.getElementById("results");
 const counter = document.getElementById("counter");
 
-// Enkel lokal besøgs-tæller
+// Local visit counter
 let visits = localStorage.getItem("visits") || 0;
 visits++;
 localStorage.setItem("visits", visits);
@@ -144,3 +144,4 @@ q.oninput = async () => {
 
 </body>
 </html>
+
