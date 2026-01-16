@@ -193,20 +193,29 @@ input:focus { outline: 2px solid var(--tmdb-color); }
 
 footer {
   display: flex;
-  gap: 15px;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  margin-top: auto;
+  align-items: center;        /* lodret centrering */
+  justify-content: center;    /* centrerer horisontalt */
+  gap: 10px;                  /* afstand mellem tekst og link */
   width: 100%;
   background-color: var(--card-bg);
-  padding: 20px 40px;
+  padding: 15px 0;
   border-top: 2px solid #333;
 }
 
-footer p { margin: 2px 0; color: #ccc; text-align: center; max-width: 600px; }
-footer a { color: var(--tmdb-color); text-decoration: none; margin-top: 10px; }
-footer a:hover { text-decoration: underline; }
+footer p, footer a {
+  margin: 0;
+  color: var(--text-color);
+  font-size: 14px;
+  text-align: center;
+}
+
+footer a {
+  text-decoration: none;
+}
+
+footer a:hover {
+  text-decoration: underline;
+
 </style>
 </head>
 <body>
@@ -228,6 +237,7 @@ footer a:hover { text-decoration: underline; }
   <p>&copy; 2026 Movie ID Finder.</p>
   <a href="https://github.com/murdervan" target="_blank"><i class="fab fa-github"></i> GitHub</a>
 </footer>
+
 
 
 
