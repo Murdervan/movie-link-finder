@@ -262,24 +262,40 @@ function topFunction() {
   document.documentElement.scrollTop = 0;
 }
 
+let searchTimeout = null;
+let lastQuery = "";
+
 // Search movies + TV
-q.addEventListener("input", async () => {
-  results.innerHTML = "";
+q.addEventListener("input", () => {
+  clearTimeout(searchTimeout);
 
-  let queryText = q.value.trim().replace(/\s+/g, ' ');
-  if (queryText.length < 2) return;
+  searchTimeout = setTimeout(async () => {
+    results.innerHTML = "";
 
-  const query = encodeURIComponent(queryText);
+    let queryText = q.value.replace(/\s+/g, " ").trim();
+    if (queryText.length < 2) return;
+    if (queryText === lastQuery) return;
+    lastQuery = queryText;
 
-  const [movieRes, tvRes] = await Promise.all([
-    fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`).then(r => r.json()),
-    fetch(`https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&query=${query}`).then(r => r.json())
-  ]);
+    const query = encodeURIComponent(queryText);
 
-  const combined = [
-    ...movieRes.results.map(r => ({ ...r, media_type: "movie" })),
-    ...tvRes.results.map(r => ({ ...r, media_type: "tv" }))
-  ];
+    const [movieRes, tvRes] = await Promise.all([
+      fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`).then(r => r.json()),
+      fetch(`https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&query=${query}`).then(r => r.json())
+    ]);
+
+    const combined = [
+      ...movieRes.results.map(r => ({ ...r, media_type: "movie" })),
+      ...tvRes.results.map(r => ({ ...r, media_type: "tv" }))
+    ];
+
+    for (const item of combined) {
+      
+      
+    }
+
+  }, 300);
+});
 
 
   for (const item of combined) {
