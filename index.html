@@ -252,9 +252,11 @@ function topFunction() {
 // Search movies + TV
 q.addEventListener("input", async () => {
   results.innerHTML = "";
-  if (q.value.length < 2) return;
 
-  const query = encodeURIComponent(q.value);
+  let queryText = q.value.trim().replace(/\s+/g, ' ');
+  if (queryText.length < 2) return;
+
+  const query = encodeURIComponent(queryText);
 
   const [movieRes, tvRes] = await Promise.all([
     fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`).then(r => r.json()),
@@ -265,6 +267,7 @@ q.addEventListener("input", async () => {
     ...movieRes.results.map(r => ({ ...r, media_type: "movie" })),
     ...tvRes.results.map(r => ({ ...r, media_type: "tv" }))
   ];
+
 
   for (const item of combined) {
     const detailUrl =
