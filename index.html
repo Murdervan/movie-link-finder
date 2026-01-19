@@ -130,24 +130,24 @@ main {
   text-shadow: 5px 5px 10px black;
 }
 
-.install-btn {
+.install-btn.subtle {
   display: inline-block;
-  margin-bottom: 20px;
-  padding: 12px 20px;
-  border-radius: 12px;
-  background: linear-gradient(90deg, #1da1f2, #f1c40f);
-  color: #000;
-  font-weight: bold;
+  margin-bottom: 12px;
+  padding: 6px 12px;
+  border-radius: 6px;
+  background-color: rgba(255, 255, 255, 0.1);
+  color: #fff;
+  font-weight: 600;
+  font-size: 14px;
   text-decoration: none;
-  font-size: 16px;
   cursor: pointer;
-  box-shadow: 0 6px 15px rgba(0,0,0,0.3);
-  transition: transform 0.15s ease, box-shadow 0.15s ease;
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: background-color 0.2s, border-color 0.2s;
 }
 
-.install-btn:hover {
-  transform: translateY(-2px);
-  box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+.install-btn.subtle:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-color: rgba(255,255,255,0.4);
 }
   
 input {
@@ -245,16 +245,17 @@ footer a:hover { text-decoration: underline; color: #0d8ddb; }
   </p>
   </div>
 
-<a
-  href="https://github.com/Murdervan/nordicq-movie-id-autofill/releases/latest/download/nordicq-autofill.user.js"
-  class="install-btn"
-  target="_blank"
->
-🚀 Install NordicQ Auto-Fill
-</a>
+ <a
+    href="https://github.com/Murdervan/nordicq-movie-id-autofill/releases/latest/download/nordicq-autofill.user.js"
+    class="install-btn subtle"
+    target="_blank"
+  >
+  🎬 Install Auto-Fill
+  </a>
 
-<div id="tm-note" style="display:none; margin-top:4px; font-size:14px; color:#ccc; text-align:center;">
-  ⚠️ Requires <a href="https://www.tampermonkey.net/" target="_blank">Tampermonkey</a>
+  <div id="tm-note" style="display:none; margin-top:4px; font-size:12px; color:#ccc; text-align:center;">
+    ⚠️ Requires <a href="https://www.tampermonkey.net/" target="_blank">Tampermonkey</a>
+  </div>
 </div>
   
   <input id="q" placeholder="Search for a movie or TV series">
