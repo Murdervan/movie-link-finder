@@ -107,6 +107,13 @@ main {
   margin-top: 20px;      
   line-height: 1;
 }
+
+.poster-type {
+  font-size: 12px;
+  margin-top: 2px;
+  opacity: 0.8;
+  letter-spacing: 0.5px;
+}
   
 input {
   width: 100%; max-width: 500px;
@@ -293,11 +300,16 @@ q.addEventListener("input", async () => {
   <div class="movie">
 
     <div class="poster-wrap">
-      <img src="${poster}" alt="${title}" loading="lazy">
-      <div class="poster-emoji">
-        ${item.media_type === "tv" ? "📺" : "🎬"}
-      </div>
-    </div>
+  <img src="${poster}" alt="${title}" loading="lazy">
+
+  <div class="poster-emoji">
+    ${item.media_type === "tv" ? "📺" : "🎬"}
+  </div>
+
+  <div class="poster-type">
+    ${item.media_type === "tv" ? "TV Series" : "Movie"}
+  </div>
+</div
 
 
         <div class="movie-info">
