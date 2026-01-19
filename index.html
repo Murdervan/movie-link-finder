@@ -94,6 +94,12 @@ main {
   color: #ccc;
   margin-top: 2px;
 }
+
+.poster-emoji {
+  text-align: center;
+  font-size: 20px;
+  margin-top: 4px;
+}
   
 input {
   width: 100%; max-width: 500px;
@@ -279,8 +285,13 @@ q.addEventListener("input", async () => {
     results.innerHTML += `
       <div class="movie">
         <img src="${poster}" alt="${title}" loading="lazy">
+        <div class="poster-emoji">
+        ${item.media_type === "tv" ? "📺" : "🎬"}
+        </div>
+
+
         <div class="movie-info">
-          <b>${title} (${year}) ${item.media_type === "tv" ? "📺" : "🎬"}</b>
+          <b>${title} (${year})</b>
           <div class="badges">${genreBadges}</div>
           <p>⭐ Rating: ${d.vote_average || "N/A"} | Votes: ${d.vote_count || 0}</p>
           <p>${d.overview?.slice(0,150) || "No description"}${d.overview?.length > 150 ? "..." : ""}</p>
