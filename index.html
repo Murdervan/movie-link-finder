@@ -180,6 +180,20 @@ main {
   text-decoration: underline;
   cursor: pointer;
 }
+
+.autofill-btn {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: center;
+  line-height: 1.2;
+}
+
+.autofill-mini {
+  font-size: 9px;
+  opacity: 0.6;
+  margin-top: 2px;
+  letter-spacing: 0.5px;
+}
   
 input {
   width: 100%; max-width: 500px;
@@ -277,12 +291,14 @@ footer a:hover { text-decoration: underline; color: #0d8ddb; }
   </div>
 
   <a
-      href="https://raw.githubusercontent.com/Murdervan/nordicq-movie-id-autofill/main/nordicq-autofill.user.js"
-      class="install-btn subtle"
-      target="_blank"
-    >
-      🎬 Install Auto-Fill
-    </a>
+  href="https://raw.githubusercontent.com/Murdervan/nordicq-movie-id-autofill/main/nordicq-autofill.user.js"
+  class="install-btn subtle autofill-btn"
+  target="_blank"
+>
+  🎬 Install Auto-Fill
+  <span class="autofill-mini">for nordicq.org</span>
+</a>
+
 
   <div id="tm-note">
   ⚠️ Requires <a href="https://www.tampermonkey.net/" target="_blank" class="tm-link">Tampermonkey</a>
