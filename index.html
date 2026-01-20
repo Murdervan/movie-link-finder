@@ -336,6 +336,7 @@ const API_KEY = "b7a512be09653a21e9b9cc99a026ae46";
 const q = document.getElementById("q");
 const results = document.getElementById("results");
 const topBtn = document.getElementById("topBtn");
+let searchId = 0;
 
 // Copy ID
 function copyToClipboard(id, button) {
@@ -360,7 +361,8 @@ function topFunction() {
 // Search movies + TV
 q.addEventListener("input", async () => {
   const currentSearch = ++searchId;
-
+  results.innerHTML = "";
+  
   let queryText = q.value.trim().replace(/\s+/g, ' ');
   if (queryText.length < 2) return;
 
