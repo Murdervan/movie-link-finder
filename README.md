@@ -1,4 +1,9 @@
-<p align="center"><strong>
+<div align="right">
+  
+  ### Check out my other 
+  
+  [![Repositories](https://img.shields.io/badge/Repositories-Murdervan-blue?style=for-the-badge&logo=github)](https://github.com/Murdervan?tab=repositories)
+</div><p align="center"><strong>
 Find your ID NUMBER from TMDB, IMDB & TVDB to request a movie!
 
 
