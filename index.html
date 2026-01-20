@@ -181,6 +181,7 @@ main {
   cursor: pointer;
 }
 
+.autofill-btn {
 .install-btn.subtle.autofill-btn {
   display: inline-flex;
   flex-direction: column;
@@ -201,7 +202,7 @@ main {
   letter-spacing: 0.4px;
   pointer-events: none;
 }
-  
+
 input {
   width: 100%; max-width: 500px;
   padding: 12px 15px; font-size: 16px;
@@ -285,58 +286,45 @@ footer a:hover { text-decoration: underline; color: #0d8ddb; }
 </head>
 <body>
 
+
 <main>
   <div class="title-container">
     <h1>Movie ID Finder</h1>
     <p class="subtitle">
-      Quickly find movies & series on
-      <span style="color:#1da1f2;">TMDb</span>,
-      <span style="color:#f1c40f;">IMDb</span>
-      & <span style="color:#4caf50;">TheTVDb</span>
-    </p>
+  Quickly find movies & series on
+  <span style="color:#1da1f2;">TMDb</span>,
+  <span style="color:#f1c40f;">IMDb</span>
+  & <span style="color:#4caf50;">TheTVDb</span>
+  </p>
   </div>
 
   <a
-    href="https://raw.githubusercontent.com/Murdervan/nordicq-movie-id-autofill/main/nordicq-autofill.user.js"
-    class="install-btn subtle autofill-btn"
-    target="_blank"
-  >
-    <span class="autofill-main">🎬 Install Auto-Fill</span>
-    <span class="autofill-mini">for nordicq.org</span>
-  </a>
+  href="https://raw.githubusercontent.com/Murdervan/nordicq-movie-id-autofill/main/nordicq-autofill.user.js"
+  class="install-btn subtle autofill-btn"
+  target="_blank"
+>
+  <span class="autofill-main">🎬 Install Auto-Fill</span>
+  <span class="autofill-mini">for nordicq.org</span>
+</a>
+
 
   <div id="tm-note">
-    ⚠️ Requires <a href="https://www.tampermonkey.net/" target="_blank" class="tm-link">Tampermonkey</a>
+  ⚠️ Requires <a href="https://www.tampermonkey.net/" target="_blank" class="tm-link">Tampermonkey</a>
+</div>
   </div>
 
-  <!-- Search + filters -->
-  <div id="search-container" style="display:flex; flex-wrap:wrap; justify-content:center; align-items:center; gap:10px; margin:20px 0;">
-    <input id="q" placeholder="Search for a movie or TV series" style="flex:1; min-width:220px; padding:12px 15px; border-radius:8px; border:none;">
-    
-    <label style="display:flex; align-items:center; font-size:14px; color:#fff;">
-      <input type="checkbox" id="chkMovie" checked style="margin-right:4px;">
-      Movie
-    </label>
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    if (!window.GM_info) {
+      const tmNote = document.getElementById('tm-note');
+      if (tmNote) tmNote.style.display = 'block';
+    }
+  });
+</script>
 
-    <label style="display:flex; align-items:center; font-size:14px; color:#fff;">
-      <input type="checkbox" id="chkTV" checked style="margin-right:4px;">
-      TV Series
-    </label>
-  </div>
-
-  <!-- Results -->
+  <input id="q" placeholder="Search for a movie or TV series">
   <div id="results"></div>
 </main>
-  
-<label style="display:flex; align-items:center; font-size:14px; color:#fff;">
-    <input type="checkbox" id="chkMovie" checked style="margin-right:4px;">
-    Movie
-  </label>
-
-  <label style="display:flex; align-items:center; font-size:14px; color:#fff;">
-    <input type="checkbox" id="chkTV" checked style="margin-right:4px;">
-    TV Series
-  </label>
 
 <footer>
   <p>&copy; 2026 Movie ID Finder. The EASY way to make a request!</p>
@@ -350,10 +338,6 @@ const API_KEY = "b7a512be09653a21e9b9cc99a026ae46";
 const q = document.getElementById("q");
 const results = document.getElementById("results");
 const topBtn = document.getElementById("topBtn");
-
-// NEW: checkboxes
-const chkMovie = document.getElementById("chkMovie");
-const chkTV = document.getElementById("chkTV");
 
 // Copy ID
 function copyToClipboard(id, button) {
@@ -375,51 +359,25 @@ function topFunction() {
   document.documentElement.scrollTop = 0;
 }
 
-// Search movies + TV with filters
+// Search movies + TV
 q.addEventListener("input", async () => {
   results.innerHTML = "";
 
-  let queryText = q.value.trim().replace(/\s+/g, " ");
+  let queryText = q.value.trim().replace(/\s+/g, ' ');
   if (queryText.length < 2) return;
 
   const query = encodeURIComponent(queryText);
 
-  // Read filters
-  let searchMovie = chkMovie.checked;
-  let searchTV = chkTV.checked;
+  const [movieRes, tvRes] = await Promise.all([
+    fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`).then(r => r.json()),
+    fetch(`https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&query=${query}`).then(r => r.json())
+  ]);
 
-  // Fallback: if both OFF → search both
-  if (!searchMovie && !searchTV) {
-    searchMovie = true;
-    searchTV = true;
-  }
+  const combined = [
+    ...movieRes.results.map(r => ({ ...r, media_type: "movie" })),
+    ...tvRes.results.map(r => ({ ...r, media_type: "tv" }))
+  ];
 
-  const requests = [];
-  if (searchMovie) {
-    requests.push(
-      fetch(`https://api.themoviedb.org/3/search/movie?api_key=${API_KEY}&query=${query}`)
-        .then(r => r.json())
-    );
-  }
-  if (searchTV) {
-    requests.push(
-      fetch(`https://api.themoviedb.org/3/search/tv?api_key=${API_KEY}&query=${query}`)
-        .then(r => r.json())
-    );
-  }
-
-  const responses = await Promise.all(requests);
-
-  let combined = [];
-  for (const res of responses) {
-    if (!res || !res.results) continue;
-    combined.push(
-      ...res.results.map(r => ({
-        ...r,
-        media_type: r.title ? "movie" : "tv"
-      }))
-    );
-  }
 
   for (const item of combined) {
     const detailUrl =
@@ -446,48 +404,60 @@ q.addEventListener("input", async () => {
       : "#";
 
     const tvdbSearch = `https://www.thetvdb.com/search?query=${encodeURIComponent(title)}`;
+    const tvdbSeries = `https://www.thetvdb.com/series/${encodeURIComponent(
+      title.toLowerCase().replace(/[^a-z0-9]+/g, "-")
+    )}`;
 
     const genreBadges =
       d.genres?.map(g => `<span class="badge">${g.name}</span>`).join("") || "";
 
     results.innerHTML += `
-      <div class="movie">
-        <div class="poster-wrap">
-          <img src="${poster}" alt="${title}" loading="lazy">
-          <div class="poster-emoji">${item.media_type === "tv" ? "📺" : "🎬"}</div>
-          <div class="poster-type">${item.media_type === "tv" ? "TV Series" : "Movie"}</div>
-        </div>
+  <div class="movie">
 
-        <div class="movie-info">
-          <b>${title} (${year})</b>
-          <div class="badges">${genreBadges}</div>
-          <p>⭐ Rating: ${d.vote_average || "N/A"} | Votes: ${d.vote_count || 0}</p>
-          <p>${d.overview?.slice(0,150) || "No description"}${d.overview?.length > 150 ? "..." : ""}</p>
+  <div class="poster-wrap">
+    <img src="${poster}" alt="${title}" loading="lazy">
 
-          <div class="id-box tmdb">
-            <a href="${tmdbLink}" target="_blank">TMDb ID: ${d.id}</a>
-            <button class="copy-btn" onclick="copyToClipboard('${d.id}', this)">Copy</button>
-          </div>
+    <div class="poster-emoji">
+      ${item.media_type === "tv" ? "📺" : "🎬"}
+    </div>
 
-          ${
-            imdbIdNum
-              ? `<div class="id-box imdb">
-                  <a href="${imdbLink}" target="_blank">IMDb ID: ${imdbIdNum}</a>
-                  <button class="copy-btn" onclick="copyToClipboard('${imdbIdNum}', this)">Copy</button>
-                </div>`
-              : ""
-          }
+    <div class="poster-type">
+      ${item.media_type === "tv" ? "TV Series" : "Movie"}
+    </div>
+  </div>
 
-          ${
-            item.media_type === "tv"
-              ? `<div class="id-box tvdb">
-                  <span>TheTVDb ID Page</span>
-                  <a class="open-btn" href="${tvdbSearch}" target="_blank">OPEN</a>
-                </div>`
-              : ""
-          }
-        </div>
-      </div>
+  <div class="movie-info">
+    <b>${title} (${year})</b>
+    <div class="badges">${genreBadges}</div>
+    <p>⭐ Rating: ${d.vote_average || "N/A"} | Votes: ${d.vote_count || 0}</p>
+    <p>${d.overview?.slice(0,150) || "No description"}${d.overview?.length > 150 ? "..." : ""}</p>
+
+    <div class="id-box tmdb">
+      <a href="${tmdbLink}" target="_blank">TMDb ID: ${d.id}</a>
+      <button class="copy-btn" onclick="copyToClipboard('${d.id}', this)">Copy</button>
+    </div>
+
+    ${
+      imdbIdNum
+        ? `<div class="id-box imdb">
+            <a href="${imdbLink}" target="_blank">IMDb ID: ${imdbIdNum}</a>
+            <button class="copy-btn" onclick="copyToClipboard('${imdbIdNum}', this)">Copy</button>
+          </div>`
+        : ""
+    }
+
+    ${
+      item.media_type === "tv"
+        ? `<div class="id-box tvdb">
+            <span>TheTVDb ID Page</span>
+            <a class="open-btn" href="${tvdbSearch}" target="_blank">OPEN</a>
+          </div>`
+        : ""
+    }
+  </div>
+
+</div>
+
     `;
   }
 });
