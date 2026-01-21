@@ -20,4 +20,4 @@ Find your ID NUMBER from TMDB, IMDB & TVDB to request a movie!
   
   - TheTVDb support added
 
-  - Addet Feedback button
+  - Addet Feedback button and star button
