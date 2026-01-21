@@ -1,4 +1,4 @@
-# MOVIE ID FINDER ![Version](https://img.shields.io/badge/version-1.1.0-blue)</p>
+# MOVIE ID FINDER ![Version](https://img.shields.io/badge/version-2.0.0-blue)</p>
 <div align="right">
   
   ### Check out my other 
@@ -10,12 +10,12 @@ Find your ID NUMBER from TMDB, IMDB & TVDB to request a movie!
 
 <p align="center"><img src="image/movie-ID-finder-logo.png" width="568" alt="Movie ID Finder">
 
-<p align="center">Update - 20/01-2026
+<p align="center">Update - 21/01-2026
   
-<p align="center">Version update 1.1.0 – What’s new:
+<p align="center">Version update 2.0.0 – What’s new:
 
   - Improved and smoother search experience
 
-  - Install Auto-Fill for nordicq.org (not officially tested)
+  - Install Auto-Fill for nordicq.org (not officially tested) - REMOVED AGAIN_MAYBE COME AGAIN
   
   - TheTVDb support added
