@@ -208,6 +208,23 @@ main {
   text-decoration: none;
 }
 
+.warning-btn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  font-weight: 500;
+  color: #ff4d4d;
+  background-color: rgba(0,0,0,0.6);
+  border-radius: 6px;
+  padding: 6px 10px;
+  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  backdrop-filter: blur(6px);
+  position: fixed;
+  bottom: 16px;
+  left: 16px;
+  z-index: 2147483647;
+}
   
 input {
   width: 100%; max-width: 500px;
@@ -298,8 +315,6 @@ footer a:hover { text-decoration: underline; color: #0d8ddb; }
     <h1>Movie ID Finder</h1>
     <p class="subtitle">
   Quickly find movies & series on
-      
-  ⚠️BEWARE OF https://danishbytes.club/ - FULL OF MALWARE TRACKERS⚠️
   <span style="color:#1da1f2;">TMDb</span>,
   <span style="color:#f1c40f;">IMDb</span>
   & <span style="color:#4caf50;">TheTVDb</span>
@@ -345,6 +360,21 @@ footer a:hover { text-decoration: underline; color: #0d8ddb; }
   </svg>
   <span>Feedback</span>
 </a>
+
+<div id="warning-btn" style="
+  position: fixed;
+  bottom: 20px;
+  left: 16px;
+  font-size: 12px;
+  color: #ff4d4d;
+  background-color: rgba(0,0,0,0.6);
+  padding: 6px 10px;
+  border-radius: 6px;
+  z-index: 2147483647;
+  max-width: 300px;
+">
+⚠️ BEWARE OF https://danishbytes.club/ - FULL OF MALWARE TRACKERS ⚠️
+</div>
   
 <footer>
   <p>&copy; 2026 Movie ID Finder.</p>
