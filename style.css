@@ -46,9 +46,6 @@ body::before {
   z-index: -1;
 }
 
-/* ----------------------------
-   Warning Box - Old Permanent Version
----------------------------- */
 #warning-btn {
   display: flex;
   align-items: center;
@@ -64,9 +61,9 @@ body::before {
   position: fixed;
   bottom: 16px;
   left: 16px;
-  z-index: 2147483648; /* Højere end feedback-btn */
-  max-width: 300px;    /* Gamle version */
-  line-height: 1;      /* Gamle version */
+  z-index: 2147483648;
+  max-width: 300px;
+  line-height: 1;
 }
 
 @media (max-width: 768px) {
