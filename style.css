@@ -46,6 +46,7 @@ body::before {
   z-index: -1;
 }
 
+/* Permanent warning box - bottom left corner */
 #warning-btn {
   display: flex;
   align-items: center;
@@ -53,17 +54,18 @@ body::before {
   font-size: 12px;
   font-weight: 500;
   color: #ff4d4d;
-  background-color: rgba(0,0,0,0.6);
+  background-color: rgba(0, 0, 0, 0.6);
   border-radius: 6px;
   padding: 6px 10px;
-  box-shadow: 0 2px 6px rgba(0,0,0,0.25);
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.25);
   backdrop-filter: blur(6px);
   position: fixed;
   bottom: 16px;
   left: 16px;
   z-index: 2147483647;
-}  
-
+  max-width: 320px;
+  line-height: 1.2;
+}
 
 @media (max-width: 768px) {
   body { background-size: contain; background-position: center top; }
