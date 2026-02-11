@@ -21,7 +21,7 @@ window.onscroll = () => {
 };
 function topFunction() {
   document.documentElement.scrollTop = 0;
-};
+}
 
 // Search movies + TV
 q.addEventListener("input", async () => {
@@ -66,7 +66,6 @@ q.addEventListener("input", async () => {
     const tvdbSearch = `https://www.thetvdb.com/search?query=${encodeURIComponent(title)}`;
 
     const genreBadges = d.genres?.map(g => `<span class="badge">${g.name}</span>`).join("") || "";
-
 
     results.innerHTML += `
 <div class="movie">
